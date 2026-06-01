@@ -34,7 +34,7 @@ pipeline {
 
         stage('Terraform Apply') {
             steps {
-                sh 'terraform apply -auto-approve tfplan'
+                sh 'terraform apply -auto-approve > error.log 2>&1'
             }
         }
     }
