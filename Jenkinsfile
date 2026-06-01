@@ -48,6 +48,13 @@ pipeline {
         }
         failure {
             echo "FAILURE: Check the logs above."
+            // --- NEW GENAI SELF-HEALING BLOCK ---
+            echo "Invoking Gemini AI Cloud Diagnoser..."
+            withEnv(["GEMINI_API_KEY=${env.GEMINI_API_KEY}"]) {
+                // 2. Execute the script: Tell Python to analyze the console log text.
+                // Note: Jenkins automatically tracks console data, but we pass your log file or pipe the log tail directly.
+                sh 'python cloud_diagnoser.py error.log || echo "[AI-Warning] Diagnoser script execution skipped or failed."'
+            }
         }
     }
 }
